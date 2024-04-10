@@ -18,10 +18,9 @@ jobs:
     
         # Paste output of `az ad sp create-for-rbac as value of secret variable: AZURE_CREDENTIALS
       with:
-          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          ARM_OBJECT_ID: ${{ secrets.OBJECT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
       
         
     - name: Deploy Azure Resource Manager (ARM) Template
@@ -30,7 +29,8 @@ jobs:
         # Provide the scope of the deployment. Valid values are: 'resourcegroup', 'managementgroup', 'subscription'
         scope: 'resourcegroup'
         # Target resource group of the deployment.
-        resourceGroupName: 'testrg'
+        resourceGroupName: 'POC'
+        dataFactoryName: 'adf-target-poc'
         # Specify the path to the ADF ARM template. In this scenario, the workflow is in the same branch, 
         # hence we only add the folder and arm template name to the path
         template: ././ARMTemplateForFactory.json
