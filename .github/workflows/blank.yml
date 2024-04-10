@@ -6,9 +6,7 @@ on:
 
 
 jobs:
-  build
-    
-      
+  build:
     runs-on: ubuntu-latest
     name: 'This deploys to Production'
     steps:
@@ -16,12 +14,14 @@ jobs:
 
     - name: Azure Login
       uses: Azure/login@v1.4.3
-      with:
-        env:
-            ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-            ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-            ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-     
+    
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+      env:
+          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          
+          ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      
         
     - name: Deploy Azure Resource Manager (ARM) Template
       uses: Azure/arm-deploy@v1.0.6
@@ -29,7 +29,7 @@ jobs:
         # Provide the scope of the deployment. Valid values are: 'resourcegroup', 'managementgroup', 'subscription'
         scope: 'resourcegroup'
         # Target resource group of the deployment.
-        resourceGroupName: 'POC'
+        resourceGroupName: 'testrg'
         # Specify the path to the ADF ARM template. In this scenario, the workflow is in the same branch, 
         # hence we only add the folder and arm template name to the path
         template: ././ARMTemplateForFactory.json
