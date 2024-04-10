@@ -17,7 +17,7 @@ jobs:
       uses: Azure/login@v1.4.3
     
         # Paste output of `az ad sp create-for-rbac as value of secret variable: AZURE_CREDENTIALS
-      env:
+      with:
           ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
           ARM_OBJECT_ID: ${{ secrets.OBJECT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
