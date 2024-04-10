@@ -23,7 +23,7 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1.4.3
     
-        # Paste output of az ad sp create-for-rbac as value of secret variable: AZURE_CREDENTIALS
+        # Paste output of az ad sp create-for-rbac as value of secret variable: AZURE_CREDENTIAL
       with:
           client-id: ${{ secrets.CLIENT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
