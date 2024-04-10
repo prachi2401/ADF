@@ -12,6 +12,8 @@ jobs:
     name: 'This deploys to Production'
     steps:
     - uses: actions/checkout@v3
+      with:
+          ref: adf_publish
 
     - name: Az Powershell Installation
       run: Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
