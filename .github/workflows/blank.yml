@@ -38,9 +38,9 @@ jobs:
         scope: 'resourcegroup'
         # Target resource group of the deployment.
         resourceGroupName: 'POC'
-        dataFactoryName: 'adf-target-poc'
         # Specify the path to the ADF ARM template. In this scenario, the workflow is in the same branch, 
         # hence we only add the folder and arm template name to the path
         template: ././ARMTemplateForFactory.json
         # Incremental (only add resources to resource group) or Complete (remove extra resources from resource group) or Validate (only validates the template).
         deploymentMode: Incremental
+        parameters: factoryName=adf-target-poc
