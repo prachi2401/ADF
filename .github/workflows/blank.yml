@@ -21,7 +21,7 @@ jobs:
       
 
     - name: Azure Login
-      uses: azure/actions/login@v1
+      uses: azure/login@v1.4.3
     
         # Paste output of az ad sp create-for-rbac as value of secret variable: AZURE_CREDENTIAL
       with:
