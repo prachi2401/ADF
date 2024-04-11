@@ -69,7 +69,7 @@ jobs:
         deploymentMode: Incremental
         # Supply deployment parameter values. In this simple scenario, 
         # I am only passing the name of the target ADF to which this is being deployed
-        parameters: adf-source/linkedTemplates/ArmTemplateParameters_master.json factoryName=adf-prod-target containerUri=https://testpocstorage.blob.core.windows.net/state containerSasToken=sp=r&st=2024-04-11T05:48:53Z&se=2024-04-11T13:48:53Z&spr=https&sv=2022-11-02&sr=c&sig=q7pRZt9f6olFI2wFfYg9IR3LjVBhKWmv1x8%2Basz1mNw%3D
+        parameters: adf-source/linkedTemplates/ArmTemplateParameters_master.json factoryName=adf-prod-target containerUri=https://testpocstorage.blob.core.windows.net/state containerSasToken=?sp=r&st=2024-04-11T05:48:53Z&se=2024-04-11T13:48:53Z&spr=https&sv=2022-11-02&sr=c&sig=q7pRZt9f6olFI2wFfYg9IR3LjVBhKWmv1x8%2Basz1mNw%3D
 
 
     # - name: Post-deployment
