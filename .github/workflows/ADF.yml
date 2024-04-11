@@ -50,7 +50,7 @@ jobs:
     - name: Pre-deployment
       uses: Azure/powershell@v1
       with:
-        # Specify the Az PowerShell script here.
+        # Specify the Az PowerShell script here
         inlineScript: pwsh -File ./adf-source/PrePostDeploymentScript.ps1 -armTemplate "./adf-source/ARMTemplateForFactory.json" -ResourceGroupName POC -DataFactoryName adf-prod-target -predeployment:$true -deleteDeployment:$false
         # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
         azPSVersion: latest
