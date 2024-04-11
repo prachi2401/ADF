@@ -1,0 +1,85 @@
+on:
+  push:
+    branches:
+      - adf_publish
+      - main
+  workflow_dispatch:
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: 'This deploys to Production'
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          ref: adf_publish
+
+    - name: Az Powershell Installation
+      run: Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
+      shell: pwsh
+      
+    - name: Azure Login
+      uses: Azure/login@v2.0.0
+      with:
+        client-id: ${{ secrets.CLIENT_ID }}
+        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        enable-AzPSSession: true
+
+    - name: Azure CLI Action
+      uses: Azure/cli@v2.0.0
+      with:
+        inlineScript: az storage blob upload-batch --account-name testpocstorage --auth-mode login -d state -s adf-source/linkedTemplates/ --overwrite
+          
+  
+    # - name: Upload to blob storage
+    #   uses: azure/CLI@v1
+    #   with:
+    #     inlineScript: |
+    #         az storage blob upload-batch --account-name adftestgha -d '$web' -s .
+    # - name: Pre-deployment
+    #   shell: pwsh
+    #   run: pwsh -File ./dev-adf-vinayak/PrePostDeploymentScript.Ver2.ps1 -armTemplate "./dev-adf-vinayak/ARMTemplateForFactory.json" -ResourceGroupName vinayak-RG -DataFactoryName prod-adf-vinayak -predeployment:$true -deleteDeployment:$false
+
+    - name: Pre-deployment
+      uses: Azure/powershell@v1
+      with:
+        # Specify the Az PowerShell script here.
+        inlineScript: pwsh -File ./adf-source/PrePostDeploymentScript.ps1 -armTemplate "./adf-source/ARMTemplateForFactory.json" -ResourceGroupName POC -DataFactoryName adf-prod-target -predeployment:$true -deleteDeployment:$false
+        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+        azPSVersion: latest
+    
+    - name: Deploy Azure Resource Manager (ARM) Template
+      uses: Azure/arm-deploy@v1.0.6
+      with:
+        # Provide the scope of the deployment. Valid values are: 'resourcegroup', 'managementgroup', 'subscription'
+        scope: 'resourcegroup'
+        # Target resource group of the deployment.
+        resourceGroupName: 'POC'
+        # Specify the path to the ADF ARM template. In this scenario, the workflow is in the same branch, 
+        # hence we only add the folder and arm template name to the path
+        template: ./adf-source/linkedTemplates/ArmTemplate_master.json
+        # Incremental (only add resources to resource group) or Complete (remove extra resources from resource group) or Validate (only validates the template).
+        deploymentMode: Incremental
+        # Supply deployment parameter values. In this simple scenario, 
+        # I am only passing the name of the target ADF to which this is being deployed
+        parameters: adf-source/linkedTemplates/ArmTemplateParameters_master.json factoryName=adf-prod-target containerUri=https://testpocstorage.blob.core.windows.net/state containerSasToken=sp=r&st=2024-04-11T05:48:53Z&se=2024-04-11T13:48:53Z&spr=https&sv=2022-11-02&sr=c&sig=q7pRZt9f6olFI2wFfYg9IR3LjVBhKWmv1x8%2Basz1mNw%3D
+
+
+    # - name: Post-deployment
+    #   shell: pwsh
+    #   run: pwsh -File ./adf-source/PrePostDeploymentScript.Ver2.ps1 -armTemplate "./adf-source/ARMTemplateForFactory.json" -ResourceGroupName POC -DataFactoryName adf-prod-target -predeployment:$false -deleteDeployment:$true
+
+    - name: Post-deployment
+      uses: Azure/powershell@v1
+      with:
+        # Specify the Az PowerShell script here.
+        inlineScript: pwsh -File ./adf-source/PrePostDeploymentScript.ps1 -armTemplate "./adf-source/ARMTemplateForFactory.json" -ResourceGroupName POC -DataFactoryName adf-prod-target -predeployment:$false -deleteDeployment:$true
+        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+        azPSVersion: latest
