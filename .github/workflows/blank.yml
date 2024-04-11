@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - adf_publish
-      - main
+     
   workflow_dispatch:
 
 permissions:
