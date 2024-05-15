@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: 'This deploys to Production'
     steps:
     - uses: actions/checkout@v3
@@ -32,7 +32,8 @@ jobs:
     - name: Azure CLI Action
       uses: Azure/cli@v2.0.0
       with:
-        inlineScript: az storage blob upload-batch --account-name adfstorage2342 --auth-mode login -d state -s adf-source/linkedTemplates/ --overwrite
+        inlineScript: az storage blob upload-batch --account-name adfstorage2342 --auth-mode login -d 'state' -s adf-source/linkedTemplates/ --overwrite
+        # inlineScript: az storage blob upload-batch --account-name adftestgha --auth-mode login -d '$web' -s dev-adf-gha/linkedTemplates/ --overwrite
           
   
     # - name: Upload to blob storage
