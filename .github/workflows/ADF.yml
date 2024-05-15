@@ -36,7 +36,7 @@ jobs:
         # inlineScript: az storage blob upload-batch --account-name adftestgha --auth-mode login -d '$web' -s dev-adf-gha/linkedTemplates/ --overwrite
 
     - name: Upload
-      run: az storage blob upload-batch --account-name adfstorage2342 --auth-mode login -d 'state' -s adf-source/linkedTemplates/ --overwrite
+      run: az storage blob upload-batch --account-name adfstorage2342 --auth-mode login -d 'adftest' -s adf-source/linkedTemplates/ --overwrite
     
   
     # - name: Upload to blob storage
