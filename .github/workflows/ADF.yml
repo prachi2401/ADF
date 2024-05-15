@@ -22,7 +22,7 @@ jobs:
       shell: pwsh
       
     - name: Azure Login
-      uses: Azure/login@v2.0.0
+      uses: Azure/login@v1
       with:
         client-id: ${{ secrets.CLIENT_ID }}
         subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
