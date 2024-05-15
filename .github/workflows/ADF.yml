@@ -1,8 +1,5 @@
 on:
-  push:
-    branches:
-      - adf_publish
-      - main
+  
   workflow_dispatch:
 
 permissions:
@@ -35,7 +32,7 @@ jobs:
     - name: Azure CLI Action
       uses: Azure/cli@v2.0.0
       with:
-        inlineScript: az storage blob upload-batch --account-name testpocstorage --auth-mode login -d state -s adf-source/linkedTemplates/ --overwrite
+        inlineScript: az storage blob upload-batch --account-name adfstorage2342 --auth-mode login -d state -s adf-source/linkedTemplates/ --overwrite
           
   
     # - name: Upload to blob storage
@@ -61,7 +58,7 @@ jobs:
         # Provide the scope of the deployment. Valid values are: 'resourcegroup', 'managementgroup', 'subscription'
         scope: 'resourcegroup'
         # Target resource group of the deployment
-        resourceGroupName: 'POC'
+        resourceGroupName: 'test'
         # Specify the path to the ADF ARM template. In this scenario, the workflow is in the same branch, 
         # hence we only add the folder and arm template name to the path
         template: ./adf-source/linkedTemplates/ArmTemplate_master.json
@@ -69,7 +66,7 @@ jobs:
         deploymentMode: Incremental
         # Supply deployment parameter values. In this simple scenario, 
         # I am only passing the name of the target ADF to which this is being deployed
-        parameters: adf-source/linkedTemplates/ArmTemplateParameters_master.json factoryName=adf-prod-target containerUri=https://testpocstorage.blob.core.windows.net/state containerSasToken=?sp=r&st=2024-04-11T05:48:53Z&se=2024-04-11T13:48:53Z&spr=https&sv=2022-11-02&sr=c&sig=q7pRZt9f6olFI2wFfYg9IR3LjVBhKWmv1x8%2Basz1mNw%3D
+        parameters: adf-source/linkedTemplates/ArmTemplateParameters_master.json factoryName=adf-git-09 containerUri=https://adfstorage2342.blob.core.windows.net/adftest containerSasToken=?sp=r&st=2024-05-15T08:10:09Z&se=2024-06-08T16:10:09Z&spr=https&sv=2022-11-02&sr=c&sig=gm6AopTvqROD8owBz%2FSjerO8zPa0kjdGOfLgHtXdOQg%3D
 
 
     # - name: Post-deployment
@@ -80,6 +77,6 @@ jobs:
       uses: Azure/powershell@v1
       with:
         # Specify the Az PowerShell script here.
-        inlineScript: pwsh -File ./adf-source/PrePostDeploymentScript.ps1 -armTemplate "./adf-source/ARMTemplateForFactory.json" -ResourceGroupName POC -DataFactoryName adf-prod-target -predeployment:$false -deleteDeployment:$true
+        inlineScript: pwsh -File ./adf-source/PrePostDeploymentScript.ps1 -armTemplate "./adf-source/ARMTemplateForFactory.json" -ResourceGroupName POC -DataFactoryName adf-fit-09 -predeployment:$false -deleteDeployment:$true
         # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
         azPSVersion: latest
