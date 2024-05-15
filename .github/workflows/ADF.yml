@@ -27,7 +27,7 @@ jobs:
         client-id: ${{ secrets.CLIENT_ID }}
         subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
         tenant-id: ${{ secrets.TENANT_ID }}
-        enable-AzPSSession: true
+        # enable-AzPSSession: true
 
     - name: Azure CLI Action
       uses: Azure/cli@v2.0.0
